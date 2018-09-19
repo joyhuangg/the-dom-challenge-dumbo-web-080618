@@ -23,53 +23,45 @@ let timer = setInterval(timing,1000);
 const main = document.getElementById('main')
 
 plus.addEventListener('click', (e) => {
-  count++;
-  counter.innerText = count + "";
-  // console.log(count);
+  if(!isPaused){
+    count++;
+    counter.innerText = count + "";
+  }
 })
 
 minus.addEventListener('click', (e) =>{
-  count--;
-  counter.innerText = count + "";
+  if(!isPaused){
+    count--;
+    counter.innerText = count + "";
+  }
 })
 
 let likeCount;
 let current;
 heart.addEventListener('click', (e) => {
-
-  // increment likeCount, same second
-  if (current === count){
-    likeCount++;
-    let element = likes.children[likes.children.length-1];
-    result = `${count} has been liked ${likeCount} `
-    let time = likeCount > 1? "times":"time"
-    result += time;
-    element.innerHTML = result;
+  if (!isPaused){
+    // increment likeCount, same second
+    if (current === count){
+      likeCount++;
+      let element = likes.children[likes.children.length-1];
+      result = `${count} has been liked ${likeCount} `
+      let time = likeCount > 1? "times":"time"
+      result += time;
+      element.innerHTML = result;
+    }
+    // create a new one, different second
+    else {
+      current = count;
+      likeCount = 1;
+      let element = document.createElement('li');
+      result = `${count} has been liked ${likeCount} `
+      let time = likeCount > 1? "times":"time"
+      result += time;
+      element.innerHTML = result;
+      // element.dataset.num = count;
+      likes.appendChild(element)
+    }
   }
-  // create a new one, different second 
-  else {
-    current = count;
-    likeCount = 1;
-    let element = document.createElement('li');
-    result = `${count} has been liked ${likeCount} `
-    let time = likeCount > 1? "times":"time"
-    result += time;
-    element.innerHTML = result;
-    element.dataset.num = count;
-    likes.appendChild(element)
-  }
-  // likeCount++;
-  // result = `${count} has been liked ${likeCount} `
-  // let time = likeCount > 1? "times":"time"
-  // result += time;
-  // let element = document.createElement('li');
-  // element.innerHTML = result;
-  // element.dataset.num = count;
-  // likes.appendChild(element)
-  // debugger
-
-  //add li to list of likes
-  //need to use closure? so that counter restarts for each item?
 })
 
 pause.addEventListener('click', (e) => {
@@ -80,11 +72,12 @@ pause.addEventListener('click', (e) => {
 
 
 submit.addEventListener('click', (e) => {
-  e.preventDefault()
-  usersComment = document.querySelector('form#comment-form input').value
-  document.body.querySelect('form#comment-form input').value = ""
-  let element = document.createElement('p');
-  element.innerHTML = usersComment;
-  commentList.appendChild(element)
-
+  if (!isPaused){
+    e.preventDefault()
+    usersComment = document.querySelector('form#comment-form input').value
+    document.body.querySelect('form#comment-form input').value = ""
+    let element = document.createElement('p');
+    element.innerHTML = usersComment;
+    commentList.appendChild(element)
+  }
 })
